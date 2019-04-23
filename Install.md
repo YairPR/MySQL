@@ -11,7 +11,7 @@ Click download:
 
 https://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.56-linux-glibc2.5-x86_64.tar.gz
 
-Open the terminal and follow along:
+if there was a previous version installed, open the terminal and follow along:
 
 - Uninstall any existing version of MySQL
 
