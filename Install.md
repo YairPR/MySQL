@@ -169,4 +169,5 @@ mysql> select version();
 +------------+
 1 row in set (0.00 sec)
 ```
-
+**Note:** If you can not restart the server for any reason you can skip that step and check the status of the service and login.
+ 
