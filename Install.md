@@ -1,7 +1,10 @@
-# MySQL Download URL
+## Install MySQL 5.5.x.x in Ubuntu 16.04
 
-## Find the correct install for MySQL 5.5/6
-Go to www.mysql.com  > downloads > you will see links for older versions.
+### MySQL Download URL
+
+#### Find the correct install for MySQL 5.5/6
+
+> Go to www.mysql.com  > downloads > you will see links for older versions.
 
 https://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.56-linux-glibc2.5-x86_64.tar.gz
 Open the terminal and follow along:
