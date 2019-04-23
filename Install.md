@@ -3,7 +3,7 @@
 MySQL Download URL
 ```
 Find the correct install for MySQL 5.5/6
-Go to (www.mysql.com)  > downloads > you will see links for older versions.
+Go to www.mysql.com > downloads > you will see links for older versions.
 When you get to the dropdowns for OS, you will see Ubuntu. Note that these only go up to 14. Instead, select Linux/Generic. 
 Scroll to the bottom to get the TAR Archive – select 32 or 64 bit.
 
