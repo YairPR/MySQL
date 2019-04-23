@@ -27,7 +27,7 @@ sudo rm /etc/mysql/ -R
 sudo apt-get autoremove mysql* --purge
 sudo apt-get remove apparmor
 ```
-- Download version 5.5.51 from MySQL site
+- Download version 5.5.xx from MySQL site
 ```
 wget https://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.56-linux-glibc2.5-x86_64.tar.gz
 ```
@@ -55,7 +55,7 @@ sudo mv mysql-5.5.56-linux-glibc2.5-x86_64 /usr/local/
 - Create mysql folder in /usr/local by moving the untarred folder
 ```
 cd /usr/local
-sudo mv mysql-5.5.49-linux2.6-x86_64 mysql
+sudo mv mysql-5.5.56-linux2.6-x86_64 mysql
 
 ```
 
