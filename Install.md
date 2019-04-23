@@ -108,7 +108,7 @@ sudo bin/mysqladmin -u root password '[your new password]'
 sudo ln -s /usr/local/mysql/bin/mysql /usr/local/bin/mysql
 ```
 
-- Reboot!
+- **Reboot!**
 
 - Start mysql server
 
@@ -138,7 +138,7 @@ sudo update-rc.d -f mysql.server defaults
 sudo update-rc.d -f mysql.server remove
 ```
 
-- REBOOT!
+- **Reboot!**
 
 - Now login using below command, start mysql server if it's not running already 
 
