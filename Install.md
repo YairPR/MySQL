@@ -107,8 +107,7 @@ sudo bin/mysqladmin -u root password '[your new password]'
 ```
 sudo ln -s /usr/local/mysql/bin/mysql /usr/local/bin/mysql
 ```
-
-- **Reboot!**
+- **Reboot!** 
 
 - Start mysql server
 
@@ -146,3 +145,28 @@ sudo update-rc.d -f mysql.server remove
 ```
 mysql -u root -p
 ```
+
+```bash
+root@xxxxxxxxxx:/usr/local/mysql# mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 2
+Server version: 5.5.56-log MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2017, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> select version();
++------------+
+| version()  |
++------------+
+| 5.5.56-log |
++------------+
+1 row in set (0.00 sec)
+```
+
