@@ -1,21 +1,21 @@
 ### Install MySQL 5.5.x.x in Ubuntu 16.04
 
 MySQL Download URL
-```
+
 Find the correct install for MySQL 5.5/6
 Go to www.mysql.com > downloads > you will see links for older versions.
 When you get to the dropdowns for OS, you will see Ubuntu. Note that these only go up to 14. Instead, select Linux/Generic. 
 Scroll to the bottom to get the TAR Archive – select 32 or 64 bit.
 
 Click download:
-```
+
 https://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.56-linux-glibc2.5-x86_64.tar.gz
-```
+
 Open the terminal and follow along:
-```
+
 - Uninstall any existing version of MySQL
 
-```
+```bash
 sudo rm /var/lib/mysql/ -R
 ```
 - Delete the MySQL profile
