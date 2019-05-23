@@ -101,3 +101,44 @@ mysql -u root -p –execute="source complete_backup.sql" –force
 mysql_upgrade -u root -p
 ```
 
+For Red Hat 7
+```
+Stop your MySQL server
+
+sudo service mysql stop
+sudo service mysql status
+
+
+Remove MySQL 5.5
+
+yum remove mysql55-server mysql55-libs mysql55-devel mysql55-bench mysql55
+
+Clear the MySQL data directory
+
+sudo rm -r /var/lib/mysql/*
+
+ Install MySQL 5.6
+
+sudo yum install mysql56 mysql56-devel mysql56-server mysql56-libs
+
+ Start MySQL server
+
+sudo service mysqld start
+or
+sudo service mysql start
+
+Set the root password
+
+mysql -u root -p
+or
+/usr/libexec/mysql56/mysqladmin -u root password ‘xxx’
+
+Import your data
+
+mysql -u root -p –force < data-for-upgrade.sql
+
+Verify all tables will work in 5.6
+
+sudo mysql_upgrade -u root -p –force
+
+```
