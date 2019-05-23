@@ -30,9 +30,9 @@ https://dev.mysql.com/doc/refman/5.6/en/mysqldump.html
 “A Logic Upgrade is the preferred method of upgrading from v5.5 to v5.6 via the use of mysqldump.”
 
 For the sake of simplicity and compatibility, we will follow the “preferred method” for upgrading in this guide.The preferred method of upgrading MySQL 5.5 to 5.6 is a Logical Upgrade.\
-`
+
 Note: https://dev.mysql.com/doc/refman/5.6/en/upgrading.html#upgrade-procedure-logical
-`
+
 You Should check out the spiffy table from the documentation for the new default settings of MySQL 5.6
 Steps:
 #### First, make a copy of your mysql database--this contains your database user data/permission. More on this below.\
