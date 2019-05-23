@@ -16,7 +16,7 @@ mysql  Ver 14.14 Distrib 5.5.59, for Linux (x86_64) using readline 5.1
 Upgrading more than one release level is supported, but only if you upgrade one release level at a time. For example, upgrade from 5.1 to 5.5, and then to 5.6. Follow the upgrade instructions for each release, in succession.
 
 Direct upgrades that skip a release level (for example, upgrading directly from MySQL 5.1 to 5.6) are not recommended or supported."\
-** Notes: http://dev.mysql.com/doc/refman/5.6/en/upgrading.html **
+Notes: http://dev.mysql.com/doc/refman/5.6/en/upgrading.html 
 
 For the purposes of this guide, I will assume that you already have a MySQL Database that you are upgrading from. Or, more concisely, you already have data in a database that you don’t want to lose. Again referencing the MySQL upgrade manual, it states the following:
 
@@ -35,18 +35,19 @@ Note: https://dev.mysql.com/doc/refman/5.6/en/upgrading.html#upgrade-procedure-l
 `
 You Should check out the spiffy table from the documentation for the new default settings of MySQL 5.6
 Steps:
-First, make a copy of your mysql database--this contains your database user data/permission. More on this below.\
+#### First, make a copy of your mysql database--this contains your database user data/permission. More on this below.\
 `
 cp -a /var/lib/mysql/ /var/lib/mysql/mysql-01
 `
 
-execute backup mysqldump
+#### Execute backup mysqldump
 
 `
 mysqldump --lock-all-tables -u root -p --all-databases > bckallmysql55.sql
-`
--- Warning: Skipping the data of table mysql.event. Specify the --events option explicitly.
-Try this workaround: --events --ignore-table=mysql.events
+`\
+This message error during execution
+#### -- Warning: Skipping the data of table mysql.event. Specify the --events option explicitly.\
+Try this workaround: --events --ignore-table=mysql.events\
 This is not a bug. Without the specified switch the event table is not being dumped. As this was confusing to users, a warning about it was added to alert users to fact and offer them the solution of performing the dump with the switch.
 
 `
