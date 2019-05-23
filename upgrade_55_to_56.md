@@ -47,7 +47,7 @@ mysqldump --lock-all-tables -u root -p --all-databases > bckallmysql55.sql
 `
 
 This message error during execution
-#### -- Warning: Skipping the data of table mysql.event. Specify the --events option explicitly.\
+#### -- Warning: Skipping the data of table mysql.event. Specify the --events option explicitly.
 Try this workaround: --events --ignore-table=mysql.events\
 This is not a bug. Without the specified switch the event table is not being dumped. As this was confusing to users, a warning about it was added to alert users to fact and offer them the solution of performing the dump with the switch.
 
@@ -59,5 +59,40 @@ or you can also use:\
 
 `
 mysqldump -uroot -pBluesky123 --routines --events --triggers --all-databases --force > bckallmysql55v3.sql
+`\
+or\
+`
+mysqldump -uroot -pBlusky123 --add-drop-table --routines --events --triggers --all-databases --force > bckallmysql55v4.sql
+`
+Shutdown service
+`
+mysqladmin -u root -p shutdown
+`
+
+Install packages and package mysql
+
+For Ubuntu:\
+`
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install mysql-server-5.6
+`
+For Debian:\
+`
+Purge
+sudo apt-get purge mysql-server-5.5 mysql-client-5.5
+sudo apt-get autoremove
+sudo apt-get install mysql-server-5.6 mysql-client-5.6
+
+Install:
+export DEBIAN_FRONTEND=noninteractive
+echo mysql-apt-config mysql-apt-config/enable-repo select mysql-5.6 | sudo debconf-set-selections
+wget http://dev.mysql.com/get/mysql-apt-config_0.5.3-1_all.deb
+dpkg –install mysql-apt-config_0.5.3-1_all.deb
+mysql -u root -p < dump.sql
+
+restore:
+mysql -u root -p –execute="source complete_backup.sql" –force
+mysql_upgrade -u root -p
 `
 
