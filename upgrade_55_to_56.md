@@ -44,7 +44,8 @@ cp -a /var/lib/mysql/ /var/lib/mysql/mysql-01
 
 `
 mysqldump --lock-all-tables -u root -p --all-databases > bckallmysql55.sql
-`\
+`
+
 This message error during execution
 #### -- Warning: Skipping the data of table mysql.event. Specify the --events option explicitly.\
 Try this workaround: --events --ignore-table=mysql.events\
@@ -54,7 +55,7 @@ This is not a bug. Without the specified switch the event table is not being dum
 mysqldump --lock-all-tables -uroot -pBluesky123 --events --ignore-table=mysql.events --all-databases > bckallmysql55v2.sql
 `
 
-or you can also use:
+or you can also use:\
 
 `
 mysqldump -uroot -pBluesky123 --routines --events --triggers --all-databases --force > bckallmysql55v3.sql
