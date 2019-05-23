@@ -22,9 +22,9 @@ For the purposes of this guide, I will assume that you already have a MySQL Data
 
 "Supported Upgrade Methods
 In-place Upgrade: Involves shutting down the old MySQL version, replacing the old MySQL binaries or packages with the new ones, restarting MySQL on the existing data directory, and running mysql_upgrade.
-Logical Upgrade: Involves exporting existing data from the old MySQL version using mysqldump, installing the new MySQL version, loading the dump file into the new MySQL version, and running mysql_upgrade."
+Logical Upgrade: Involves exporting existing data from the old MySQL version using mysqldump, installing the new MySQL version, loading the dump file into the new MySQL version, and running mysql_upgrade."\
 Note
-MySQL recommends a mysqldump upgrade when upgrading from a previous release. For example, use this method when upgrading from 5.5 to 5.6.
+MySQL recommends a mysqldump upgrade when upgrading from a previous release. For example, use this method when upgrading from 5.5 to 5.6.\
 https://dev.mysql.com/doc/refman/5.6/en/mysqldump.html
 
 “A Logic Upgrade is the preferred method of upgrading from v5.5 to v5.6 via the use of mysqldump.”
@@ -35,12 +35,13 @@ Note: https://dev.mysql.com/doc/refman/5.6/en/upgrading.html#upgrade-procedure-l
 `
 You Should check out the spiffy table from the documentation for the new default settings of MySQL 5.6
 Steps:
-First, make a copy of your mysql database--this contains your database user data/permission. More on this below.
+First, make a copy of your mysql database--this contains your database user data/permission. More on this below.\
 `
 cp -a /var/lib/mysql/ /var/lib/mysql/mysql-01
 `
 
 execute backup mysqldump
+
 `
 mysqldump --lock-all-tables -u root -p --all-databases > bckallmysql55.sql
 `
