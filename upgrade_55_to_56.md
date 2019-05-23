@@ -69,30 +69,30 @@ Shutdown service
 mysqladmin -u root -p shutdown
 `
 
-Install packages and package mysql
+##### Install packages and package mysql
 
 For Ubuntu:\
 `
-sudo apt-get update
-sudo apt-get upgrade
+sudo apt-get update\
+sudo apt-get upgrade\
 sudo apt-get install mysql-server-5.6
 `
 For Debian:\
 `
-Purge
-sudo apt-get purge mysql-server-5.5 mysql-client-5.5
-sudo apt-get autoremove
+Purge\
+sudo apt-get purge mysql-server-5.5 mysql-client-5.5\
+sudo apt-get autoremove\
 sudo apt-get install mysql-server-5.6 mysql-client-5.6
 
-Install:
-export DEBIAN_FRONTEND=noninteractive
-echo mysql-apt-config mysql-apt-config/enable-repo select mysql-5.6 | sudo debconf-set-selections
-wget http://dev.mysql.com/get/mysql-apt-config_0.5.3-1_all.deb
-dpkg –install mysql-apt-config_0.5.3-1_all.deb
+Install:\
+export DEBIAN_FRONTEND=noninteractive\
+echo mysql-apt-config mysql-apt-config/enable-repo select mysql-5.6 | sudo debconf-set-selections\
+wget http://dev.mysql.com/get/mysql-apt-config_0.5.3-1_all.deb\
+dpkg –install mysql-apt-config_0.5.3-1_all.deb\
 mysql -u root -p < dump.sql
 
-restore:
-mysql -u root -p –execute="source complete_backup.sql" –force
+restore:\
+mysql -u root -p –execute="source complete_backup.sql" –force\
 mysql_upgrade -u root -p
 `
 
