@@ -55,7 +55,7 @@ This is not a bug. Without the specified switch the event table is not being dum
 mysqldump --lock-all-tables -uroot -pBluesky123 --events --ignore-table=mysql.events --all-databases > bckallmysql55v2.sql
 `
 
-or you can also use:\
+or you can also use:
 
 `
 mysqldump -uroot -pBluesky123 --routines --events --triggers --all-databases --force > bckallmysql55v3.sql
@@ -64,7 +64,8 @@ or\
 `
 mysqldump -uroot -pBlusky123 --add-drop-table --routines --events --triggers --all-databases --force > bckallmysql55v4.sql
 `
-Shutdown service
+#### Shutdown service
+
 `
 mysqladmin -u root -p shutdown
 `
@@ -72,11 +73,11 @@ mysqladmin -u root -p shutdown
 ##### Install packages and package mysql
 
 For Ubuntu:
-
+```
 sudo apt-get update\
 sudo apt-get upgrade\
 sudo apt-get install mysql-server-5.6
-
+```
 For Debian:
 
 Purge\
