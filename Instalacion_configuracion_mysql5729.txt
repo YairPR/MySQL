@@ -1,0 +1,239 @@
+################################################################################
+Instalación MySQL Server 
+
+Version Motor: 5.7.29
+Version SO: Oracle Linux 7.6
+Ref: https://oracle-base.com/articles/mysql/mysql-installation-on-linux
+################################################################################
+
+
+-Desinstalar cualquier version
+- Liberias si no van con la version
+- Crear usaurio mysql y grupo
+- Instalar MYSQL
+- detener servicios
+- crear directorios nuevos con permisos /files 755 y archivos 660 mysql:mysql
+- mover data de /var/lib/mysql a /new_path
+- dar permisos chmod y chown
+- validar permisos
+- backup my.cnf
+- modificar my.cnf con las nuevas rutas datadir y log 
+- renombrar en /var/lib/mysql backup: sudo rsync -av /var/lib/mysql /mnt/volume-nyc1-01
+- validar nuevamente permisos del nuevo path
+- iniciar servicios
+
+- PRE - INSTALACIÓN
+- Verificando que no haya instalaciones previas de MySQL:
+# grep mysql /etc/passwd
+# rpm -q mysql
+
+- De existir alguna instalación previa hay que desinstalar y elminar los archivos de /var/lib/mysql
+---- Desinstalar MySQL 5.7.29
+yum -y remove mysql mysql-server
+yum -y remove mysql mysql-common
+:Como no hay instalacion envia el prompt:
+/*
+Loaded plugins: langpacks, ulninfo
+No Match for argument: mysql
+No Match for argument: mysql-server
+No Packages marked for removal
+*/
+
+:Renombrar directorios /var/lib/mysql
+# mv /var/lib/mysql /var/lib/mysql_old_backup
+# mv /etc/mysql /etc/mysql_old_backup
+
+
+- INSTALAR MOTOR
+
+Setup the MySQL software 
+El primer conjunto de comandos se ejecuta como usuario root (indicador #) para configurar el entorno. 
+En el directorio /opt/mysql y descomprima el software MySQL.
+-- crear usaurio o verificar los permisos del que exista
+# id mysql
+uid=27(mysql) gid=27(mysql) groups=27(mysql)
+
+# userdel mysql
+# groupadd -g 300 mysql
+# useradd -u 300 -g 300 -d /home/mysql -s /bin/bash -c "MySQL DBA" mysql
+# passwd mysql
+# mkdir -p /opt/mysql
+#ls chown -R mysql:mysql /opt/mysql  
+Descargar por yum repository si hay acceso a internet sino bajar y subir el archivo al servidor por winscp
+# cd /opt/mysql
+# tar xvf mysql-5.7.29-1.el7.x86_64.rpm-bundle.tar
+--> Instalación
+# rpm -ivh mysql-community-{server,client,common,libs}-*
+
+======================================================================================
+Mensaje al ejecutar el comando anterior:
+warning: mysql-community-server-5.7.29-1.el7.x86_64.rpm: Header V3 DSA/SHA1 Signature, key ID 5072e1f5: NOKEY
+error: Failed dependencies:
+        mariadb-libs is obsoleted by mysql-community-libs-5.7.29-1.el7.x86_64
+        mariadb-libs is obsoleted by mysql-community-libs-compat-5.7.29-1.el7.x86_64
+
+Solucion:
+# yum -y remove mysql-libs
+========================================================================================
+
+- Volver a ejecutar la instalación: 
+#  rpm -ivh mysql-community-{server,client,common,libs}-*
+
+-- habilitando el servicio systemctl
+# systemctl enable mysqld
+# systemctl start mysqld
+# systemctl status mysqld
+
+
+- CONFIGURACIÓN
+-- Directorios por defecto:
+/var/log/mysqld.log
+/var/lib/mysql
+
+--Seteo de password root
+# grep 'temporary password' /var/log/mysqld.log
+# /usr/bin/mysql_secure_installation
+
+-- Validar acceso
+:No deja ingresar en modo local usar:
+# mysql -h 127.0.0.1 -P 3306 -u root -p
+
+:Acceso Modo local
+# mysql -u root -p 
+|
+|_____Error: mysqladmin: connect to server at 'localhost' failed
+             error: 'Access denied for user 'root'@'localhost' (using password: NO)'
+=============================================================================================================================
+Solución:
+# systemctl stop mysqld
+# systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
+# systemctl start mysqld
+# mysql -u root
+mysql> SET GLOBAL validate_password_policy=LOW;
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'telefonica';
+ó
+mysql> UPDATE mysql.user SET authentication_string = PASSWORD('Telefonica2021*') WHERE User = 'root' AND Host = 'localhost';
+# systemctl stop mysqld
+# systemctl unset-environment MYSQLD_OPTS
+# systemctl start mysqld
+# mysql -u root -p
+===============================================================================================================================
+
+- CAMBIO DE DIRECTORIOS
+/opt/mysql                 - Symbolic link to software directory location
+/software/mysql/data       - Data directory for MySQL
+/software/mysql/binlogs    - Binary log files location
+/software/mysql/admin      - Administration files location
+/software/mysql/backups    - Backup files location
+/software/mysql/innodata   - InnoDB shared location
+/software/mysql/innologs   - InnoDB transaction logs location
+
+-- datadir y socket
+-- Comprobamos el estado del servicio:
+# systemctl status mysqld
+-- Detenemos el servicio
+# systemctl stop mysqld
+-- Validar el FileSystem
+df -PHT
+
+:IMPORTANTE: los permisos para directorios 755 y para los archivos 660
+-- creamos las nuevas rutas:
+-- Colocar el SO en estado permisivo para poder mover los files
+SELINUX=permissive
+editar: /etc/selinux/config
+SELINUX:
+# sestatus -- estado
+# setenforce 0 ----- deeshabilitar
+
+# mkdir -p /software/mysql
+# cd /software/mysql
+# mkdir -p data binlogs admin backups innodata innologs log
+# chown -R mysql:mysql /software/mysql
+# chmod 755 -R /software/mysql
+
+-- modificamos el archivo de parametros: my.cnf
+-- backup
+# cp /etc/my.cnf /etc/my.cnf.ori
+-- permisos
+# ls -lrt /etc/my.cnf
+-- edita
+# vi /etc/my.cnf
+-- mover los files de /var/lib/mysql hacia el nuevo directorio
+Nota: Ahora que el servidor está apagado, copiaremos el directorio de la base de datos existente en la nueva
+      ubicación con rsync. El uso de la -a flag conserva los permisos y otras propiedades del directorio, 
+      mientras que -v proporciona una salida detallada para que pueda seguir el progreso.
+# rsync -av /var/lib/mysql/ /software/mysql/data
+
+-Renombrar el directorio original de instalacion
+mv /var/lib/mysql /var/lib/mysql-backup
+
+-- validar los archivos y permisos
+# ls -lrt /software/mysql/data
+-- Antes de iniciar servicios validar que todos los permisos este correctos
+cat /etc/my.cnf
+ls -lrt /software/mysql
+-- habilitar servicio
+systemctl status mysqld
+systemctl start mysqld
+
+-- Moviendo log-error, pid file, innodb
+-- detener servicios
+systemctl stop mysqld
+-- edit /etc/my.cnf
+-- Poner la ruta correcta y verificar permisos
+log-error=/software/mysql/log/mysqld.log
+
+Al mover el pid file es necesario tambien editar el archivo de configuracion del servicio mysqld:
+# vi /usr/lib/systemd/system/mysqld.service
+Valores a modificar:
+PIDFile
+ExecStart
+
+-- Después de editar, ejecutar:
+# systemctl daemon-reload
+
+--En my.cnf
+pid-file=/software/mysql/admin/mysqld.pid
+
+-- En innodata debe ir los archivos: ib_buffer_pool ibtmp1 ibdata1
+innodb_data_home_dir=/software/mysql/innodata
+innodb_buffer_pool_filename=/software/mysql/innodata
+# mv ib_buffer_pool ibdata1  /software/mysql/innodata
+-- En Innolog: ib_logfile1 ib_logfile0
+innodb_log_group_home_dir=/software/mysql/innolog
+# mv ib_logfile0 ib_logfile1 /software/mysql/innolog
+
+-- INICIAR SERVICIOS
+- Validar PERMISOS de los directorios y sub directorios
+# ls -lrt
+cat /my/cnf
+# systemctl start mysqld
+
+-- Validar acceso:
+# mysql -u root -p
+Error: ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysql/mysql.sock' (2)
+===================================================================
+Solución: Agregar en el my.cnf los datos de localhost
+[client]
+password       = telefonica ---opcional es para ingresar directo
+host            = 127.0.0.1
+port            = 3306
+socket          = /var/run/mysql/mysql.sock
+=====================================================================
+-- Reiniciar
+# systemctl restart mysqld
+# mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+
+- Comandos validar cambios a nivel de BD
+show variables like '%log_bin%';
+show variables like '%pid%';
+SHOW VARIABLES WHERE Variable_Name LIKE "%dir";
+select @@datadir;
+- Comandos
+grep -i -E 'mysql.*error' /var/log/syslog
+ls -RZ /data/mysql/var/lib/ | grep ib_buffer_pool
+
+
+
